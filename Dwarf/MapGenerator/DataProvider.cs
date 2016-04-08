@@ -1,4 +1,5 @@
-﻿using MapGenerator.Objects;
+﻿using MapGenerator.Maps;
+using MapGenerator.MapObjects;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -8,45 +9,58 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
+using MapGenerator.Controllers;
+using MapGenerator.Menu;
 namespace MapGenerator
 {
-    public static class DataLoader
+    public static class DataProvider
     {
         public static Settings settings { get; set; }
 
-        static DataLoader()
+        static DataProvider()
         {
             settings = LoadSettings();
         }
 
-        public static GlobalMap GenerateMap()
+        public static CavelMap GenerateCaveMap(Player player = null)
         {
             //Base
-            var map = new GlobalMap(settings.MAP_WIDTH, settings.MAP_HEIGHT);
-
+            var map = new CavelMap(settings.MAP_WIDTH, settings.MAP_HEIGHT);
             //Caves
             if (settings.CAVES)
                 map.AddCaves(settings.CAVES_COUNT, settings.CAVES_LENGTH);
-
             //Water
             if (settings.WATER)
                 map.AddWater(settings.WATER_COUNT, settings.WATER_MIN_SIZE, settings.WATER_MAX_SIZE);
-
             //Gold
             if (settings.GOLD)
                 map.AddGold(settings.GOLD_VALUE, settings.GOLD_COUNT);
-
             //Player
             if (settings.PLAYER)
-                map.AddPlayer(LoadPlayer());
-
-
-
+                if (player == null)
+                    map.AddPlayer(LoadPlayer());
             // Exit
             if (settings.EXIT)
-                map.AddExit();
-
+                for (int i = 0; i < settings.EXIT_COUNT; i++ )
+                    map.AddExit();
             return map;
+        }
+
+        public static ShopMap GenerateShopMap(Player player = null)
+        {
+            var map = new ShopMap(settings.MAP_WIDTH, settings.MAP_HEIGHT);
+            //Player
+            if (settings.PLAYER)
+                if (player == null)
+                    map.AddPlayer(LoadPlayer(), settings.MAP_WIDTH / 2, settings.MAP_HEIGHT/ 2);
+            return map;
+        }
+
+
+        public static BaseController GetController()
+        {
+            return new CaveController(GenerateCaveMap());
+            //return new ShopController(GenerateShopMap());
         }
 
         public static bool WritePlayer(Player player)
@@ -63,6 +77,7 @@ namespace MapGenerator
             }
             catch (Exception e)
             {
+                string text = e.Message;
                 return false;
             }
         }
@@ -109,6 +124,7 @@ namespace MapGenerator
                     return player;
                 }
             } catch (Exception e) {
+                string text = e.Message;
                 return new Player();
             }
         }

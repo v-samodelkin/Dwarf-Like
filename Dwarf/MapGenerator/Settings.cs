@@ -10,8 +10,10 @@ namespace MapGenerator
     public class Settings
     {
         // Base
-        public int MAP_WIDTH = 200;
-        public int MAP_HEIGHT = 60;
+        public int MAP_WIDTH = 180;
+        public int MAP_HEIGHT = 45;
+        public int SAVE_COST = 7;
+
         // Caves
         public bool CAVES = true;
         public int CAVES_COUNT = 33;
@@ -22,7 +24,6 @@ namespace MapGenerator
         public int GOLD_VALUE = 1;
         public int GOLD_COUNT = 30;
         public int GOLD_TARGET = 20;
-        public int SAVE_COST = 7;
 
         // Player
         public bool PLAYER = true;
@@ -32,10 +33,11 @@ namespace MapGenerator
         public int WATER_COUNT = 15;
         public int WATER_MIN_SIZE = 1;
         public int WATER_MAX_SIZE = 120;
-        public bool FLOOD = true;
+        public bool WATER_FLOOD = true;
 
         //Exit
         public bool EXIT = true;
+        public int EXIT_COUNT = 2;
 
         public Settings() { }
     }

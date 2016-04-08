@@ -1,11 +1,12 @@
-﻿using System;
+﻿using MapGenerator.Items;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace MapGenerator.Objects
+namespace MapGenerator.MapObjects
 {
     public class Player : MapObject, IActor
     {
@@ -28,7 +29,8 @@ namespace MapGenerator.Objects
         public int Level { get; set; }
         public int CurrentXp { get; set; }
         public int MaxXp { get; set; }
-
+        public int InventorySize { get; set; }
+        public List<Item> Inventory { get; set; }
         public Player() : base('@', ConsoleColor.Black, ConsoleColor.Green) {
             Ground = new Earth();
             MaxHp = 50;
@@ -39,6 +41,7 @@ namespace MapGenerator.Objects
             MaxVitality = 100;
             CurrentVitality = 90;
             MaxXp = 100;
+            InventorySize = 10;
         }
 
         public void SpendGold(int count)

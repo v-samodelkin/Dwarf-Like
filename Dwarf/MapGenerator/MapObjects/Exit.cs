@@ -4,12 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MapGenerator.Objects
+namespace MapGenerator.MapObjects
 {
-    public class Gravestone : MapObject
+    public class Exit : MapObject, IInteractive
     {
-        public Gravestone(Player player) : base('T', ConsoleColor.DarkGray, ConsoleColor.Gray) { }
-
+        public Exit() : base('E', ConsoleColor.DarkYellow, ConsoleColor.DarkMagenta) { }
         public override MapObject Check()
         {
             return this;

@@ -1,4 +1,4 @@
-﻿using MapGenerator.Objects;
+﻿using MapGenerator.MapObjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;

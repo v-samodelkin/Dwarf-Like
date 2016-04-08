@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace MapGenerator.Objects
+namespace MapGenerator.MapObjects
 {
     public class Earth : MapObject, IFree
     {

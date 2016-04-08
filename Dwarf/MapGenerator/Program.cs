@@ -1,4 +1,6 @@
-﻿using MapGenerator.Objects;
+﻿using MapGenerator.Controllers;
+using MapGenerator.MapObjects;
+using MapGenerator.Menu;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,151 +12,69 @@ namespace MapGenerator
 {
     class Program
     {
-        // Base
-        public const int WIDTH = 240;
-        public const int HEIGHT = 70;
-        // Menu
-        public const int UP_MENU_HEIGHT = 7;
-        public const int RIGHT_MENU_WIDTH = 4;
 
-        private static Menu menu;
+
+        private static BaseMenu menu;
 
         private static bool quit = false;
+        public static BaseController gameController;
         static void Main(string[] args)
         {
             // Base Console
             Console.CursorVisible = false;
-            Console.SetWindowSize(WIDTH, HEIGHT);
-            Console.BufferWidth = WIDTH;
-            Console.BufferHeight = HEIGHT;
+            Console.SetWindowSize(ConsoleSettings.WIDTH, ConsoleSettings.HEIGHT);
+            Console.BufferWidth = ConsoleSettings.WIDTH;
+            Console.BufferHeight = ConsoleSettings.HEIGHT;
 
-            var gameController = new GameController(DataLoader.GenerateMap());
+            //Game Controller
+            gameController = DataProvider.GetController();
+
             // Menu
-            //PrintSample();
-            menu = new Menu(gameController);
-            Player_Changed(new object(), EventArgs.Empty);
-            gameController.Map.Player.Changed += Player_Changed;
-            DrawAround(gameController.Map);
-
-            //DataLoader.WritePlayer(gameController.Map.Player);
+            menu = gameController.GenerateMenu();
+            menu.FullRefresh();
+            gameController.Player.Changed += menu.Player_Changed;
 
             //Draw Map
-            HardDrawMap(gameController.Map);
+            GraphicModule.DrawRectangle(ConsoleSettings.RIGHT_MENU_WIDTH, ConsoleSettings.UP_MENU_HEIGHT, gameController.BaseMap.Width, gameController.BaseMap.Height, '~', ConsoleColor.DarkYellow, ConsoleColor.DarkYellow);
+            GraphicModule.HardDrawMap(gameController.BaseMap);
 
-            gameController.TrySavePlayer(true);
+            // Delete Old Save
+            DataProvider.WritePlayer(new Player());
+
             //Mainloop
-            MainLoop(gameController);
+            MainLoop();
         }
 
-        static void Player_Changed(object sender, EventArgs e)
+        public static void Restart()
         {
-            menu.PrintHp();
-            menu.PrintMp();
-            menu.PrintGold();
-            menu.PrintXp();
+            gameController = DataProvider.GetController();
+            menu.Reregister(gameController);
+            gameController.Player.Changed += menu.Player_Changed;
+            menu.Player_Changed(new object(), EventArgs.Empty);
+            GraphicModule.HardDrawMap(gameController.BaseMap);
+            DataProvider.WritePlayer(new Player());
         }
 
-        static void MainLoop(GameController gc)
+
+
+        static void MainLoop()
         {
             do
             {
-                gc.HandleInput(Console.ReadKey(true));
-                SoftDrawMap(gc.Map);
+                gameController.HandleInput(Console.ReadKey(true));
+                GraphicModule.SoftDrawMap(gameController.BaseMap);
             }
             while (!quit);
         }
 
-        // Отрисовка карты
-        public static void HardDrawMap(GlobalMap map) {
-            Console.SetCursorPosition(RIGHT_MENU_WIDTH, UP_MENU_HEIGHT);
-            for (int y = 0; y < map.Height; y++)
-            {
-                for (int x = 0; x < map.Width; x++)
-                {
-                    using (new Colorife(map[x, y]))
-                    {
-                        Console.Write(map[x, y].Char);
-                    }
-                }
-                Console.SetCursorPosition(RIGHT_MENU_WIDTH, UP_MENU_HEIGHT + y + 1);
-            }
-        }
 
-        // Отрисовка зафиксированных изменений
-        public static void SoftDrawMap(GlobalMap map)
-        {
-            for (int y = 0; y < map.Height; y++)
-            {
-                for (int x = 0; x < map.Width; x++)
-                {
-                    if (map.Retouch(x, y))
-                    {
-                        Console.SetCursorPosition(RIGHT_MENU_WIDTH + x, UP_MENU_HEIGHT + y);
-                        using (new Colorife(map[x, y]))
-                        {
-                            Console.Write(map[x, y].Char);
-                        }
-                    }
-                }
-            }
-        }
-        // Примеры цветов
-        static void PrintSample()
-        {
-            for (int l = 0; l < 4; l++)
-            {
-                for (int c = 0; c < 16; c++)
-                {
-                    using (new Colorife((ConsoleColor)c))
-                    {
-                        for (int w = 0; w < 5; w++)
-                        {
-                            Console.Write(".");
-                        }
-                    }
-                }
-                Console.WriteLine();
-            }
-            for (int c = 0; c < 16; c++)
-            {
-                var color = (ConsoleColor)c;
-                Console.WriteLine(color.ToString());
-            }
-        }
 
-        // Рамка
-        static void DrawAround(GlobalMap map)
-        {
-            using (new Colorife(ConsoleColor.DarkYellow, ConsoleColor.DarkYellow))
-            {
-                Console.SetCursorPosition(RIGHT_MENU_WIDTH - 1, UP_MENU_HEIGHT - 1);
-                for (int i = 0; i < map.Width + 2; i++)
-                    Console.Write("~");
-                Console.SetCursorPosition(RIGHT_MENU_WIDTH - 1, UP_MENU_HEIGHT + map.Height);
-                for (int i = 0; i < map.Width + 2; i++)
-                    Console.Write("~");
-                for (int i = 0; i < map.Height; i++)
-                {
-                    Console.SetCursorPosition(RIGHT_MENU_WIDTH - 1, UP_MENU_HEIGHT + i);
-                    Console.Write("~");
-                    Console.SetCursorPosition(RIGHT_MENU_WIDTH + map.Width, UP_MENU_HEIGHT + i);
-                    Console.Write("~");
-                }
-            }
-        }
 
-        public static void ConsoleMessage(string message) {
-            using (new Colorife(ConsoleColor.Black, ConsoleColor.Gray)) {
-                Console.SetCursorPosition(RIGHT_MENU_WIDTH, HEIGHT - 2);
-                Console.Write(message);
-                for (int i = 0; i < WIDTH - RIGHT_MENU_WIDTH - message.Length; i++)
-                    Console.Write(" ");
-            }
-        }
+
 
         public static void Save(string obj, bool flag)
         {
-            ConsoleMessage(
+            GraphicModule.ConsoleMessage(
                 flag ?
                 String.Format("Сохранение {0} прошло успешно! Ура!", obj) :
                 String.Format("СОХРАНЕНИЕ {0} НЕ УДАЛОСЬ! Возможно, не хватило прав на запись файла. Попробуйте перенести игру в другую папку или запустить от администратора (если не боитесь)", obj.ToUpper())

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MapGenerator.Objects
+namespace MapGenerator.MapObjects
 {
     public class Gravel : MapObject
     {
