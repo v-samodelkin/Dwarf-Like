@@ -32,7 +32,17 @@ namespace MapGenerator.Controllers
         };
         public void MovePlayer(Point delta)
         {
-            var pos = BaseMap.PlayerCell;
+            Point pos;
+            try
+            {
+                pos = BaseMap.PlayerCell;
+            }
+            catch (IndexOutOfRangeException e)
+            {
+                string text = e.Message;
+                return;
+            }
+            
             var newPos = pos + delta;
             if (!BaseMap.ValidP(newPos))
                 return;

@@ -104,5 +104,15 @@ namespace MapGenerator
                 Console.WriteLine(color.ToString());
             }
         }
+
+        // Вывод сообщения прямо на карту
+        public static void PrintOnMap(Point pos, string message)
+        {
+            Console.SetCursorPosition(ConsoleSettings.RIGHT_MENU_WIDTH + pos.X, ConsoleSettings.UP_MENU_HEIGHT + pos.Y);
+            using (new Colorife(ConsoleColor.Black, ConsoleColor.Gray))
+            {
+                Console.Write(message);
+            }
+        }
     }
 }

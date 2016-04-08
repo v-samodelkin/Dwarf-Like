@@ -12,10 +12,6 @@ namespace MapGenerator.Controllers
     public class CaveController : BaseController
     {
         public int TurnNumber;
-        public static List<String> after = new List<String>() {
-            "GAME OVER!", "LEAVE ME ALONE!", "I ad DEAD!", "Boooo!", "Where is my graveyard...", "I... whant... sleep", "Helo from Zombie!", "Braaaains!",
-            "Hey. It is REALLY end of the game. Not joke. Just give me some more time for scoreboard and other things"
-        };
         public CavelMap Map { get; set; }
         public override BaseMap BaseMap {
             get
@@ -42,10 +38,6 @@ namespace MapGenerator.Controllers
         public override void Player_Changed(object sender, EventArgs e)
         {
             dynamic ch = Map.Player.Check();
-            if (ch is Gravestone)
-            {
-                Console.WriteLine(after[Map.rand.Next(after.Count)]);
-            }
         }
 
         public override void HandleInput(ConsoleKeyInfo key)

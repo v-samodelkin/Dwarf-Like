@@ -15,33 +15,27 @@ namespace MapGenerator.MapObjects
         [XmlIgnore]
         public MapObject Ground { get; set; }
         public int Gold { get; set; }
-        public int MaxHp { get; set; }
-        public int CurrentHp { get; set; }
-        public int MaxMp { get; set; }
-        public int CurrentMp { get; set; }
         public string Name { get; set; }
-        public int CurrentVitality { get; set; }
-        public int MaxVitality { get; set; }
-        public int MaxSatiety { get; set; }
-        public int CurrentSatiety { get; set; }
-        public int CurrentThirst { get; set; }
-        public int MaxThirst { get; set; }
         public int Level { get; set; }
-        public int CurrentXp { get; set; }
-        public int MaxXp { get; set; }
         public int InventorySize { get; set; }
+        public Attribute Hp { get; set; }
+        public Attribute Mp { get; set; }
+        public Attribute Vitality { get; set; }
+        public Attribute Starve { get; set; }
+        public Attribute Thirst { get; set; }
+        public Attribute Xp { get; set; }
         public List<Item> Inventory { get; set; }
         public Player() : base('@', ConsoleColor.Black, ConsoleColor.Green) {
             Ground = new Earth();
-            MaxHp = 50;
-            CurrentHp = 40;
-            CurrentMp = 20;
-            MaxMp = 30;
+            Hp = new Attribute(40, 50);
+            Mp = new Attribute(20, 30);
+            Vitality = new Attribute(90, 100);
+            Xp = new Attribute(0, 100);
+            Thirst = new Attribute(0, 100);
+            Starve = new Attribute(0, 100);
             Name = "Antoto";
-            MaxVitality = 100;
-            CurrentVitality = 90;
-            MaxXp = 100;
             InventorySize = 10;
+            Inventory = new List<Item>();
         }
 
         public void SpendGold(int count)
@@ -62,7 +56,7 @@ namespace MapGenerator.MapObjects
         public MapObject ActWith(Gold mo)
         {
             Gold += mo.Value;
-            CurrentXp += mo.Value;
+            Xp.Current += mo.Value;
             OnChanged(EventArgs.Empty);
             return new Earth();
         }
@@ -77,9 +71,9 @@ namespace MapGenerator.MapObjects
             mo.Hp--;
             if (mo.Hp < 5)
             {
-                CurrentHp--;
+                Hp.Current--;
                 if (mo.Hp == 0)
-                    CurrentXp++;
+                    Xp.Current++;
                 OnChanged(EventArgs.Empty);
             }
 
@@ -94,7 +88,7 @@ namespace MapGenerator.MapObjects
 
         public override MapObject Check()
         {
-            if (CurrentHp > 0)
+            if (Hp.Current > 0)
                 return this;
             return new Gravestone(this);
         }
@@ -105,9 +99,9 @@ namespace MapGenerator.MapObjects
             mo.Hp--;
             if (mo.Hp < 3)
             {
-                CurrentHp--;
+                Hp.Current--;
                 if (mo.Hp == 0)
-                    CurrentXp++;
+                    Xp.Current++;
                 OnChanged(EventArgs.Empty);
             }
 
@@ -129,7 +123,7 @@ namespace MapGenerator.MapObjects
 
         public MapObject ActWith(Water mo)
         {
-            CurrentHp--;
+            Hp.Current--;
             OnChanged(EventArgs.Empty);
             return mo.Check();
         }

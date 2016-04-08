@@ -9,6 +9,10 @@ namespace MapGenerator.Maps
 {
     public abstract class BaseMap
     {
+        public static List<String> after = new List<String>() {
+            "GAME OVER!", "Leave me alone...", "Just DEAD!", "Boooo!", "Where is my graveyard...", "I... whant... sleep", "Helo from Zombie!", "Braaaains!",
+            "Hey. It is REALLY end of the game. Without joke", "42"
+        };
         public readonly int Height;
         public readonly int Width;
         public Player Player { get; protected set; }
@@ -50,7 +54,11 @@ namespace MapGenerator.Maps
             var oldPos = PlayerCell;
             this[oldPos.X, oldPos.Y] = Player.Ground;
             Player.Ground = this[newPos.X, newPos.Y];
-            this[newPos.X, newPos.Y] = Player;
+            this[newPos.X, newPos.Y] = Player.Check();
+            if (Player.Check() is Gravestone)
+            {
+                GraphicModule.PrintOnMap(new Point(newPos.X + 1, newPos.Y), after[rand.Next(after.Count)]);
+            }
         }
 
         public BaseMap(int width, int height)

@@ -11,13 +11,13 @@ namespace MapGenerator
     {
         // Base
         public int MAP_WIDTH = 180;
-        public int MAP_HEIGHT = 45;
+        public int MAP_HEIGHT = 49;
         public int SAVE_COST = 7;
 
         // Caves
         public bool CAVES = true;
-        public int CAVES_COUNT = 33;
-        public int CAVES_LENGTH = 800;
+        public int CAVES_COUNT = 28;
+        public int CAVES_LENGTH = 900;
 
         // Gold
         public bool GOLD = true;

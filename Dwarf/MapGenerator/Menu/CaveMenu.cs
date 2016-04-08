@@ -32,24 +32,26 @@ namespace MapGenerator.Menu
             FullRefresh();
         }
 
+
+
         public void PrintXp()
         {
-            PrintXp(3, 4, caveController.Map.Player);
+            PrintXp(AfterMapX, 3, caveController.Map.Player);
         }
 
         public void PrintHp()
         {
-            PrintHp(3, 1, caveController.Map.Player);
+            PrintHp(AfterMapX, 1, caveController.Map.Player);
         }
 
         public void PrintMp()
         {
-            PrintMp(3, 2, caveController.Map.Player);
+            PrintMp(AfterMapX, 2, caveController.Map.Player);
         }
 
         public void PrintGold()
         {
-            PrintGold(3, 3, caveController.Map.Player);
+            PrintGold(AfterMapX, ConsoleSettings.HEIGHT - 3, caveController.Map.Player);
         }
 
         public void PrintInventory()

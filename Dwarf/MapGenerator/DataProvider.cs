@@ -117,13 +117,15 @@ namespace MapGenerator
 
         public static Player LoadPlayer()
         {
+
             try {
                 XmlSerializer serializer = new XmlSerializer(typeof(Player));
                 using(var st =  File.OpenRead("Players.XML")) {
-                    var player = (Player)serializer.Deserialize(st);
-                    return player;
+                    var player = serializer.Deserialize(st);
+                    return (Player)player;
                 }
-            } catch (Exception e) {
+            } 
+            catch (Exception e) {
                 string text = e.Message;
                 return new Player();
             }

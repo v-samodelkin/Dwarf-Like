@@ -8,7 +8,7 @@ namespace MapGenerator.MapObjects
 {
     public class Gravestone : MapObject
     {
-        public Gravestone(Player player) : base('T', ConsoleColor.DarkGray, ConsoleColor.Gray) { }
+        public Gravestone(Player player) : base('T', ConsoleColor.DarkGray, ConsoleColor.DarkRed) { }
 
         public override MapObject Check()
         {
