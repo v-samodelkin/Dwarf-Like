@@ -19,5 +19,13 @@ namespace MapGenerator.MapObjects
                 return this;
             return new Earth();
         }
+
+        public override string[] Info
+        {
+            get
+            {
+                return String.Format(" Кусок гравия").Split('\n');
+            }
+        }
     }
 }

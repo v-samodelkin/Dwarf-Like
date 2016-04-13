@@ -29,6 +29,9 @@ namespace MapGenerator
             //Caves
             if (settings.CAVES)
                 map.AddCaves(settings.CAVES_COUNT, settings.CAVES_LENGTH);
+            //Clear
+            if (settings.CAVES_CLEAR)
+                map.ClearFromSmallRocks(settings.CAVES_CLEAR_SIZE);
             //Water
             if (settings.WATER)
                 map.AddWater(settings.WATER_COUNT, settings.WATER_MIN_SIZE, settings.WATER_MAX_SIZE);
@@ -46,21 +49,43 @@ namespace MapGenerator
             return map;
         }
 
-        public static ShopMap GenerateShopMap(Player player = null)
+        public static CityMap GenerateShopMap(Player player = null)
         {
-            var map = new ShopMap(settings.MAP_WIDTH, settings.MAP_HEIGHT);
+            var map = new CityMap(settings.MAP_WIDTH, settings.MAP_HEIGHT);
+
+
+
+
+            //Road
+            map.AddRoad(settings.CITY_ROAD_WIDTH, settings.CITY_ROAD_BRAKES, settings.CITY_ROAD_LINES);
+
+            //Shops
+            map.PlaceShop("PotionShop");
+
             //Player
             if (settings.PLAYER)
                 if (player == null)
-                    map.AddPlayer(LoadPlayer(), settings.MAP_WIDTH / 2, settings.MAP_HEIGHT/ 2);
+                    map.AddPlayer(LoadPlayer());
             return map;
         }
 
 
         public static BaseController GetController()
         {
-            return new CaveController(GenerateCaveMap());
-            //return new ShopController(GenerateShopMap());
+            int controllers = 0;
+            if (settings.CAVES)
+                controllers++;
+            if (settings.CITY)
+                controllers++;
+
+            if (controllers == 0)
+                throw new ArgumentException("Не выбран режим игры. Пожалуйста, включите один в настройках: CAVES, CITY");
+            if (controllers > 1)
+                throw new ArgumentException("Выбрано сразу несколько режимов игры. Пожалуйста, включите только один: CAVES, CITY");
+
+            if (settings.CAVES)
+                return new CaveController(GenerateCaveMap());
+            return new CityController(GenerateShopMap());
         }
 
         public static bool WritePlayer(Player player)

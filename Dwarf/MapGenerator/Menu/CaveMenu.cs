@@ -15,7 +15,9 @@ namespace MapGenerator.Menu
 
         public override void Reregister(BaseController controller)
         {
- 	        this.caveController = (CaveController)controller;
+            var cc = (CaveController)controller;
+            this.caveController = cc;
+            cc.Menu = this;
         }
 
         public override void FullRefresh()
@@ -25,6 +27,7 @@ namespace MapGenerator.Menu
             PrintGold();
             PrintXp();
             PrintInventory();
+            PrintGroundInfo();
         }
 
         public override void Player_Changed(object sender, EventArgs e)
@@ -57,6 +60,11 @@ namespace MapGenerator.Menu
         public void PrintInventory()
         {
             PrintInventory(caveController.Map.Player);
+        }
+
+        public void PrintGroundInfo()
+        {
+            PrintGroundInfo(caveController.Map.Player);
         }
     }
 }

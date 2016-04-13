@@ -14,10 +14,15 @@ namespace MapGenerator
         public int MAP_HEIGHT = 49;
         public int SAVE_COST = 7;
 
+        //Location
+        public bool CITY = true;
+        public bool CAVES = false;
+
         // Caves
-        public bool CAVES = true;
         public int CAVES_COUNT = 28;
         public int CAVES_LENGTH = 900;
+        public bool CAVES_CLEAR = true;
+        public int CAVES_CLEAR_SIZE = 5;
 
         // Gold
         public bool GOLD = true;
@@ -38,6 +43,13 @@ namespace MapGenerator
         //Exit
         public bool EXIT = true;
         public int EXIT_COUNT = 2;
+
+
+        //City
+        
+        public int CITY_ROAD_WIDTH = 5;
+        public int CITY_ROAD_BRAKES = 2;
+        public int CITY_ROAD_LINES = 3;
 
         public Settings() { }
     }

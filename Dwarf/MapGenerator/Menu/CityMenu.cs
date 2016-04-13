@@ -7,17 +7,19 @@ using System.Text;
 
 namespace MapGenerator.Menu
 {
-    public class ShopMenu : BaseMenu
+    public class CityMenu : BaseMenu
     {
-        private ShopController shopController;
-        public ShopMenu(ShopController caveController)
+        private CityController shopController;
+        public CityMenu(CityController caveController)
         {
             this.shopController = caveController;
         }
 
         public override void Reregister(BaseController controller)
         {
-            this.shopController = (ShopController)controller;
+            var cc = (CityController)controller;
+            this.shopController = cc;
+            cc.Menu = this;
         }
 
         public override void FullRefresh()
@@ -27,6 +29,7 @@ namespace MapGenerator.Menu
             PrintGold();
             PrintXp();
             PrintInventory();
+            PrintGroundInfo();
         }
 
         public override void Player_Changed(object sender, EventArgs e)
@@ -36,27 +39,32 @@ namespace MapGenerator.Menu
 
         public void PrintXp()
         {
-            PrintXp(3, 4, shopController.Map.Player);
+            PrintXp(AfterMapX, 3, shopController.Map.Player);
         }
 
         public void PrintHp()
         {
-            PrintHp(3, 1, shopController.Map.Player);
+            PrintHp(AfterMapX, 1, shopController.Map.Player);
         }
 
         public void PrintMp()
         {
-            PrintMp(3, 2, shopController.Map.Player);
+            PrintMp(AfterMapX, 2, shopController.Map.Player);
         }
 
         public void PrintGold()
         {
-            PrintGold(3, 3, shopController.Map.Player);
+            PrintGold(AfterMapX, ConsoleSettings.HEIGHT - 3, shopController.Map.Player);
         }
 
         public void PrintInventory()
         {
             PrintInventory(shopController.Map.Player);
+        }
+
+        public void PrintGroundInfo()
+        {
+            PrintGroundInfo(shopController.Map.Player);
         }
     }
 }

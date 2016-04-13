@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace MapGenerator.MapObjects
 {
-    public class Gravestone : MapObject
+    public class Road : MapObject, IFree
     {
-        public Gravestone(Player player) : base('T', ConsoleColor.DarkGray, ConsoleColor.DarkRed) { }
+        public Road() : base('░', ConsoleColor.Black, ConsoleColor.White) { }
 
         public override MapObject Check()
         {
@@ -19,7 +19,7 @@ namespace MapGenerator.MapObjects
         {
             get
             {
-                return String.Format(" Могильный камень игрока").Split('\n');
+                return String.Format(" Дорога. \n Ускоряет движение.").Split('\n');
             }
         }
     }

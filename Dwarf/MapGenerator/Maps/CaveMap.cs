@@ -16,6 +16,20 @@ namespace MapGenerator.Maps
                 for (int x = 0; x < Width; x++)
                     Map[x, y] = new Rock();
         }
+
+        public void CheckActives()
+        {
+            for (int y = 0; y < Height; y++)
+                for (int x = 0; x < Width; x++)
+                    if (this[x, y] is IActor)
+                    {
+                        var chkd = this[x, y].Check();
+                        if (chkd != this[x, y])
+                            this[x, y] = chkd;
+                        if (chkd is Gravestone)
+                            GraphicModule.PrintOnMap(new Point(x + 1, y), after[rand.Next(after.Count)]);
+                    }
+        }
         ////////////////////////////////////////////////////////////////////////////////
         public void AddWater(int count, int minSize, int maxSize)
         {
@@ -113,6 +127,56 @@ namespace MapGenerator.Maps
             {
                 var cell = GetFreeCell();
                 this[cell.X, cell.Y] = new Gravel();
+            }
+        }
+
+        public void ClearFromSmallRocks(int size = 5)
+        {
+            var was = new bool[Width, Height];
+            for (int x = 0; x < Width; x++)
+            {
+                for (int y = 0; y < Height; y++)
+                {
+                    if (was[x, y])
+                        continue;
+                    int cnt = _dfs(was, x, y);
+                    if (cnt <= size && cnt > 0)
+                        _clear(x, y);
+                }
+            }
+        }
+
+        private int _dfs(bool[,] was, int x, int y)
+        {
+            int cnt;
+            was[x, y] = true;
+            if (this[x, y] is Rock)
+                cnt = 1;
+            else
+                return 0;
+            for (int i = 0; i < 4; i++)
+            {
+                int nx = x + dx[i];
+                int ny = y + dy[i];
+                if (ValidX(nx) && ValidY(ny) && this[nx, ny] is Rock && !was[nx, ny])
+                {
+                    cnt += _dfs(was, nx, ny);
+                }
+            }
+            return cnt;
+        }
+
+        private void _clear(int x, int y)
+        {
+            this[x, y] = new Earth();
+            for (int i = 0; i < 4; i++)
+            {
+                int nx = x + dx[i];
+                int ny = y + dy[i];
+                if (ValidX(nx) && ValidY(ny) && this[nx, ny] is Rock)
+                {
+                    _clear(nx, ny);
+                }
             }
         }
     }

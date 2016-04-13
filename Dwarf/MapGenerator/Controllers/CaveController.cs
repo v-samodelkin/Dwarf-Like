@@ -13,6 +13,8 @@ namespace MapGenerator.Controllers
     {
         public int TurnNumber;
         public CavelMap Map { get; set; }
+
+        public CaveMenu Menu { get; set; }
         public override BaseMap BaseMap {
             get
             {
@@ -37,27 +39,24 @@ namespace MapGenerator.Controllers
 
         public override void Player_Changed(object sender, EventArgs e)
         {
-            dynamic ch = Map.Player.Check();
+            return;
         }
 
         public override void HandleInput(ConsoleKeyInfo key)
         {
             if (HandleMovement(key))
                 return;
+            if (HandleInventory(key))
+                return;
             switch (key.Key)
             {
-                case ConsoleKey.R:
-                    Program.Restart();
-                    break;
                 case ConsoleKey.P:
                     TrySavePlayer();
                     break;
                 case ConsoleKey.O:
                     TrySaveSettings();
                     break;
-                case ConsoleKey.G:
-                    Map.Player.SpendGold(-10);
-                    break;
+
             }
         }
 
@@ -97,14 +96,17 @@ namespace MapGenerator.Controllers
         public override void Turn()
         {
             TurnNumber++;
-            Map.Collapse(Math.Min(TurnNumber/50, 3));
+            Map.Collapse(Math.Min(TurnNumber/50, 4));
             if (DataProvider.settings.WATER_FLOOD)
                 Map.Flood(TurnNumber / 10);
+            Map.CheckActives();
+            Menu.Turn(Player);
         }
 
         public override BaseMenu GenerateMenu()
         {
-            return new CaveMenu(this);
+            Menu = new CaveMenu(this);
+            return Menu;
         }
     }
 }

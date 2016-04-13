@@ -8,6 +8,7 @@ using System.Xml.Serialization;
 
 namespace MapGenerator.MapObjects
 {
+    [XmlInclude(typeof(SmallHealthPotion))]
     public class Player : MapObject, IActor
     {
         public delegate void ChangedEventHandler(object sender, EventArgs e);
@@ -38,6 +39,14 @@ namespace MapGenerator.MapObjects
             Inventory = new List<Item>();
         }
 
+        public void Activate()
+        {
+            var interactive = Ground as IInteractive;
+            if (interactive == null)
+                return;
+            interactive.OnActivated(EventArgs.Empty);
+        }
+
         public void SpendGold(int count)
         {
             if (count > Gold)
@@ -52,6 +61,30 @@ namespace MapGenerator.MapObjects
                 Changed(this, e);
         }
 
+        public void UseItem(int num)
+        {
+            num--;
+            if (num < 0 || num >= Inventory.Count)
+                return;
+            Inventory[num].Activate(this);
+            if (Inventory[num].Breaked())
+                Inventory.RemoveAt(num);
+            Changed(this, EventArgs.Empty);
+        }
+
+        public void GetItem(Item item)
+        {
+            Inventory.Add(item);
+            Changed(this, EventArgs.Empty);
+        }
+
+        public bool Home()
+        {
+            return (Ground is Exit);
+        }
+
+
+        ///////////////////////////////////////////////////////////////////
 
         public MapObject ActWith(Gold mo)
         {
@@ -109,11 +142,6 @@ namespace MapGenerator.MapObjects
             return mo.Check();
         }
 
-        public bool Home()
-        {
-            return (Ground is Exit);
-        }
-
 
         public MapObject ActWith(Exit mo)
         {
@@ -126,6 +154,30 @@ namespace MapGenerator.MapObjects
             Hp.Current--;
             OnChanged(EventArgs.Empty);
             return mo.Check();
+        }
+
+
+        public MapObject ActWith(Road mo)
+        {
+            return mo.Check();
+        }
+
+
+        public MapObject ActWith(ShopCell mo)
+        {
+            mo.Activate();
+            return mo;
+        }
+
+        /// <summary>
+        /// ///////////////////////////////////////
+        /// </summary>
+        public override string[] Info
+        {
+            get
+            {
+                return String.Format(" Игрок {0}", Name).Split('\n');
+            }
         }
     }
 }

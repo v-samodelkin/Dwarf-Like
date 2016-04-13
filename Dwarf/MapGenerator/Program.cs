@@ -48,11 +48,12 @@ namespace MapGenerator
         public static void Restart()
         {
             gameController = DataProvider.GetController();
-            menu.Reregister(gameController);
+            menu = gameController.GenerateMenu();
             gameController.Player.Changed += menu.Player_Changed;
             menu.Player_Changed(new object(), EventArgs.Empty);
             GraphicModule.HardDrawMap(gameController.BaseMap);
             DataProvider.WritePlayer(new Player());
+            GraphicModule.ConsoleMessage("");
         }
 
 
@@ -66,11 +67,6 @@ namespace MapGenerator
             }
             while (!quit);
         }
-
-
-
-
-
 
         public static void Save(string obj, bool flag)
         {

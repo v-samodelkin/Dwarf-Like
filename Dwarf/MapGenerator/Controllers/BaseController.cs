@@ -1,6 +1,7 @@
 ﻿using MapGenerator.MapObjects;
 using MapGenerator.Maps;
 using MapGenerator.Menu;
+using MapGenerator.ModalForms;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +18,7 @@ namespace MapGenerator.Controllers
         public abstract BaseMenu GenerateMenu();
         public abstract BaseMap BaseMap { get;  }
         public abstract void Turn();
-
+        public ModalForm ModalForm { get; set; }
 
         public static Dictionary<ConsoleKey, Point> movement = new Dictionary<ConsoleKey, Point>() {
             {ConsoleKey.W, new Point(0, -1) },
@@ -70,9 +71,40 @@ namespace MapGenerator.Controllers
                     MovePlayer(movement[key.Key]);
                     Turn();
                     return true;
+                case ConsoleKey.R:
+                    DataProvider.settings.CAVES = false;
+                    DataProvider.settings.CITY = true;
+                    Program.Restart();
+                    return true;
+                case ConsoleKey.E:
+                    Player.Activate();
+                    return true;
                 default:
                     return false;
             }
+        }
+
+        public bool HandleInventory(ConsoleKeyInfo key)
+        {
+            switch (key.Key)
+            {
+                case ConsoleKey.D0:
+                case ConsoleKey.D1:
+                case ConsoleKey.D2:
+                case ConsoleKey.D3:
+                case ConsoleKey.D4:
+                case ConsoleKey.D5:
+                case ConsoleKey.D6:
+                case ConsoleKey.D7:
+                case ConsoleKey.D8:
+                case ConsoleKey.D9:
+                    Player.UseItem(int.Parse(key.KeyChar.ToString()));
+                    return true;
+                case ConsoleKey.G:
+                    Player.SpendGold(-10);
+                    return true;
+            }
+            return false;
         }
 
     }

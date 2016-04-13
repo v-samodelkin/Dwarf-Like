@@ -13,5 +13,21 @@ namespace MapGenerator.MapObjects
         {
             return this;
         }
+
+        public event ActivatedEventHandler Activated;
+
+        public void OnActivated(EventArgs e)
+        {
+            if (Activated != null)
+                Activated(this, e);
+        }
+
+        public override string[] Info
+        {
+            get
+            {
+                return " Выход! \n Сохранение персонажа: \n   7 монет \n Сохранение настроек: \n   бесплатно".Split('\n');
+            }
+        }
     }
 }

@@ -45,14 +45,17 @@
     <Compile Include="Colorife.cs" />
     <Compile Include="ConsoleSettings.cs" />
     <Compile Include="Controllers\BaseController.cs" />
-    <Compile Include="Controllers\ShopController.cs" />
+    <Compile Include="Controllers\CityController.cs" />
     <Compile Include="DataProvider.cs" />
     <Compile Include="Controllers\CaveController.cs" />
+    <Compile Include="Items\SmallHealthPotion.cs" />
+    <Compile Include="MapObjects\Road.cs" />
+    <Compile Include="MapObjects\ShopCell.cs" />
     <Compile Include="Maps\BaseMap.cs" />
     <Compile Include="Maps\CaveMap.cs" />
     <Compile Include="GraphicModule.cs" />
     <Compile Include="Items\Item.cs" />
-    <Compile Include="Maps\ShopMap.cs" />
+    <Compile Include="Maps\CityMap.cs" />
     <Compile Include="Menu\BaseMenu.cs" />
     <Compile Include="Menu\CaveMenu.cs" />
     <Compile Include="MapObjects\Exit.cs" />
@@ -67,7 +70,9 @@
     <Compile Include="MapObjects\Player.cs" />
     <Compile Include="MapObjects\Rock.cs" />
     <Compile Include="MapObjects\Water.cs" />
-    <Compile Include="Menu\ShopMenu.cs" />
+    <Compile Include="Menu\CityMenu.cs" />
+    <Compile Include="ModalForms\ModalForm.cs" />
+    <Compile Include="ModalForms\ShopModal.cs" />
     <Compile Include="Point.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -76,8 +81,11 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="Resources\" />
+    <EmbeddedResource Include="Resources\PotionShop.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

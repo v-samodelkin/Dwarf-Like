@@ -17,5 +17,13 @@ namespace MapGenerator.MapObjects
         {
             return this;
         }
+
+        public override string[] Info
+        {
+            get
+            {
+                return String.Format(" Кусок золота. \n Стоимость: {0} монет", Value).Split('\n');
+            }
+        }
     }
 }

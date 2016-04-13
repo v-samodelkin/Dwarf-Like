@@ -1,4 +1,5 @@
 ﻿using MapGenerator.Maps;
+using MapGenerator.ModalForms;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -113,6 +114,52 @@ namespace MapGenerator
             {
                 Console.Write(message);
             }
+        }
+
+
+        // Отрисовка модального окна 
+        public static void DrawModal(BaseMap map, ModalForm modal)
+        {
+            int width = modal.Width;
+            int height = modal.Height;
+
+            int dx = (map.Width - width) / 2;
+            int dy = (map.Height - height) / 2;
+
+            DrawRectangle(dx, dy, width, height, modal.FrameChar, modal.FrameCharBack, modal.FrameCharFront);
+            modal.Draw(dx, dy);
+        }
+
+        // Удаление модального окна 
+        public static void RemoveModal(BaseMap map, ModalForm modal)
+        {
+            int width = modal.Width;
+            int height = modal.Height;
+
+            int dx = (map.Width - width) / 2;
+            int dy = (map.Height - height) / 2;
+
+            for (int x = dx - 3; x <= dx + width; x++)
+            {
+                for (int y = dy - 3; y <= dy + height; y++)
+                {
+                    if (map.ValidX(x) && map.ValidY(y))
+                        map.TouchMap[x, y] = true;
+                }
+            }
+        }
+
+        // Написание по центру строки
+        public static void ModalWriteCenter(ModalForm modal, int line, string text)
+        {
+            int dx = modal.Dx;
+            int dy = modal.Dy;
+            int len = text.Length;
+            int startX = dx + modal.Width / 2 - len / 2;
+            int startY = dy + line;
+
+            Console.SetCursorPosition(startX, startY);
+            Console.Write(text);
         }
     }
 }

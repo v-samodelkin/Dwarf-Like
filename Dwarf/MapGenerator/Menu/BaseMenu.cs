@@ -23,11 +23,11 @@ namespace MapGenerator.Menu
             }
         }
 
-        private int prevItems;
+        private int prevItems = 10;
         public void PrintInventory(int dx, int dy, Player player)
         {
             int height = player.InventorySize + 1;
-            int width = 20;
+            int width = 24;
             
             using (new Colorife(ConsoleColor.Black, ConsoleColor.White))
             {
@@ -38,10 +38,41 @@ namespace MapGenerator.Menu
                         Console.Write(" ");
                 }
                 Console.SetCursorPosition(dx, dy);
-                Console.Write("Items {0}/{1}     ", player.Inventory.Count, player.InventorySize);
+                Console.Write("Инвентарь {0}/{1}     ", player.Inventory.Count, player.InventorySize);
+                for (int i = 0; i < player.Inventory.Count; i++)
+                {
+                    Console.SetCursorPosition(dx, dy + i + 1);
+                    Console.Write((i + 1).ToString() + ")" + player.Inventory[i].Name);
+                }
+                for (int i = player.Inventory.Count; i < prevItems; i++)
+                {
+                    Console.SetCursorPosition(dx, dy + i + 1);
+                    Console.Write("                        ");
+                }
             }
             GraphicModule.DrawRectangle(dx, dy, width, height, ' ', ConsoleColor.Blue);
             prevItems = player.Inventory.Count;
+        }
+
+        public void PrintGroundInfo(int dx, int dy, Player player)
+        {
+            string[] Info = player.Ground.Info;
+            int height = 7;
+            int width = 24;
+            for (int i = 0; i < 7; i++)
+            {
+                Console.SetCursorPosition(dx, dy + i);
+                int was = 0;
+                if (i < Info.Count())
+                {
+                    Console.Write(Info[i]);
+                    was = Info[i].Length;
+                }
+                for (int j = was; j < 24; j++)
+                    Console.Write(" ");
+            }
+
+            GraphicModule.DrawRectangle(dx, dy, width, height, ' ', ConsoleColor.Blue);
         }
 
         public void PrintXp(int dx, int dy, Player player)
@@ -155,6 +186,20 @@ namespace MapGenerator.Menu
         {
             int able = (int)Math.Min(att.Current * ConsoleSettings.BAR_WIDTH / att.Max, att.Max);
             return new Point(able, ConsoleSettings.BAR_WIDTH - able);
+        }
+
+        private string[] prevInfo;
+        public void PrintGroundInfo(Player player)
+        {
+            int dx = DataProvider.settings.MAP_WIDTH + ConsoleSettings.RIGHT_MENU_WIDTH + 3;
+            int dy = 7 + player.InventorySize + 5;
+            PrintGroundInfo(dx, dy, player);
+            prevInfo = player.Ground.Info;
+        }
+
+        public void Turn(Player player)
+        {
+            PrintGroundInfo(player);
         }
     }
 }

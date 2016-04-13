@@ -15,5 +15,12 @@ namespace MapGenerator.MapObjects
         {
             return this;
         }
+
+        public override string[] Info
+        {
+            get {
+                return " Просто кусок земли. \n Кажется, безопасный".Split('\n');
+            }
+        }
     }
 }

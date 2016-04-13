@@ -15,5 +15,7 @@ namespace MapGenerator.MapObjects
         MapObject ActWith(Gravel mo);
         MapObject ActWith(Exit mo);
         MapObject ActWith(Water mo);
+        MapObject ActWith(Road mo);
+        MapObject ActWith(ShopCell mo);
     }
 }

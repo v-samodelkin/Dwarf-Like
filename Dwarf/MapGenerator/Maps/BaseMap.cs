@@ -11,7 +11,7 @@ namespace MapGenerator.Maps
     {
         public static List<String> after = new List<String>() {
             "GAME OVER!", "Leave me alone...", "Just DEAD!", "Boooo!", "Where is my graveyard...", "I... whant... sleep", "Helo from Zombie!", "Braaaains!",
-            "Hey. It is REALLY end of the game. Without joke", "42"
+            "Hey. It is REALLY end of the game. Without joke", "42", "Мозгииииии...", "(@_@)", "Упс", "Бульк об стену..."
         };
         public readonly int Height;
         public readonly int Width;
@@ -20,7 +20,7 @@ namespace MapGenerator.Maps
         protected static int[] dx = { 1, 0, -1, 0 };
         protected static int[] dy = { 0, -1, 0, 1 };
         public MapObject[,] Map { get; set; }
-        protected bool[,] TouchMap { get; set; }
+        public bool[,] TouchMap { get; set; }
 
         public MapObject this[int x, int y]
         {
@@ -39,8 +39,6 @@ namespace MapGenerator.Maps
         {
             bool old = TouchMap[x, y];
             TouchMap[x, y] = false;
-            if (old == true)
-                return old; // Не индус, нужно было поставить дебаг только на True-значение.
             return old;
         }
 
@@ -73,7 +71,8 @@ namespace MapGenerator.Maps
 
         public void AddPlayer(Player player, int x, int y)
         {
-            Map[x, y] = player;
+            player.Ground = this[x, y];
+            this[x, y] = player;
             Player = player;
         }
 

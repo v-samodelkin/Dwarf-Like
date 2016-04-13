@@ -11,6 +11,8 @@ namespace MapGenerator.MapObjects
         public readonly ConsoleColor BackgroundColor;
         public readonly ConsoleColor ForegroundColor;
         public readonly char Char;
+
+        public abstract string[] Info { get; }
         public MapObject(char Ch, ConsoleColor Back = ConsoleColor.Black, ConsoleColor Front = ConsoleColor.DarkGray)
         {
             Char = Ch;

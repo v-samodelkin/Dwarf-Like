@@ -14,5 +14,13 @@ namespace MapGenerator.MapObjects
        {
            return this;
        }
+
+       public override string[] Info
+       {
+           get
+           {
+               return String.Format(" Вода. \n Холодная и мокрая. \n Брр.").Split('\n');
+           }
+       }
     }
 }
